@@ -38,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		FA0D15201F91D3AD0049113C /* Inceptionv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Inceptionv3.mlmodel; sourceTree = "<group>"; };
+		FA0D15221F91E2E70049113C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		FA14E2EB1F91096D0010A10F /* ARSelfie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARSelfie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA14E2EE1F91096D0010A10F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FA14E2F01F91096D0010A10F /* Scene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Scene.sks; sourceTree = "<group>"; };
@@ -83,6 +84,7 @@
 		FA14E2E21F91096C0010A10F = {
 			isa = PBXGroup;
 			children = (
+				FA0D15221F91E2E70049113C /* README.md */,
 				FA14E2ED1F91096D0010A10F /* ARSelfie */,
 				FA14E3061F91096D0010A10F /* ARSelfieTests */,
 				FA14E3111F91096D0010A10F /* ARSelfieUITests */,
