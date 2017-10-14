@@ -6,31 +6,30 @@
 //  Copyright © 2017 Trollwerks Inc. All rights reserved.
 //
 
-import UIKit
-import SpriteKit
 import ARKit
+import SpriteKit
 
 internal class ViewController: UIViewController {
     
-    @IBOutlet var sceneView: ARSKView!
-    
+    @IBOutlet var sceneView: ARSKView?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Set the view's delegate
-        sceneView.delegate = self
+        sceneView?.delegate = self
         
         // Show statistics such as fps and node count
-        sceneView.showsFPS = true
-        sceneView.showsDrawCount = true
-        sceneView.showsNodeCount = true
-        sceneView.showsQuadCount = true
-        sceneView.showsPhysics = true
-        sceneView.showsFields = true
+        sceneView?.showsFPS = true
+        sceneView?.showsDrawCount = true
+        sceneView?.showsNodeCount = true
+        sceneView?.showsQuadCount = true
+        sceneView?.showsPhysics = true
+        sceneView?.showsFields = true
 
         // Load the SKScene from 'Scene.sks'
         if let scene = SKScene(fileNamed: "Scene") {
-            sceneView.presentScene(scene)
+            sceneView?.presentScene(scene)
         }
     }
     
@@ -41,14 +40,14 @@ internal class ViewController: UIViewController {
         let configuration = ARWorldTrackingConfiguration()
 
         // Run the view's session
-        sceneView.session.run(configuration)
+        sceneView?.session.run(configuration)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         // Pause the view's session
-        sceneView.session.pause()
+        sceneView?.session.pause()
     }
     
     override func didReceiveMemoryWarning() {
