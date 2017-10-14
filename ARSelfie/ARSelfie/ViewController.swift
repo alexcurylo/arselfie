@@ -8,14 +8,25 @@
 
 import ARKit
 import SpriteKit
+import Vision
 
 internal class ViewController: UIViewController {
     
     @IBOutlet var sceneView: ARSKView?
 
+    @IBOutlet weak var visionInfo: UITextView?
+    var visionRequests = [VNRequest]()
+    let visionQueue = DispatchQueue(label: "com.arselfie.visionQueue")
+    var visionThing: String = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        setupScene()
+        setupVision()
+    }
+
+    func setupScene() {
         // Set the view's delegate
         sceneView?.delegate = self
         
@@ -31,8 +42,12 @@ internal class ViewController: UIViewController {
         if let scene = SKScene(fileNamed: "Scene") {
             sceneView?.presentScene(scene)
         }
+
+        if let visionInfo = visionInfo {
+            sceneView?.addSubview(visionInfo)
+        }
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -94,8 +109,8 @@ extension ViewController: SKViewDelegate {
 extension ViewController: ARSKViewDelegate {
 
     func view(_ view: ARSKView, nodeFor anchor: ARAnchor) -> SKNode? {
-        // Create and configure a node for the anchor added to the view's session.
-        let labelNode = SKLabelNode(text: "🤡")
+        let text = visionThing.isEmpty ? "🤡" : visionThing
+        let labelNode = SKLabelNode(text: text)
         labelNode.horizontalAlignmentMode = .center
         labelNode.verticalAlignmentMode = .center
         return labelNode;
@@ -115,5 +130,65 @@ extension ViewController: ARSKViewDelegate {
 
     func view(_ view: ARSKView, didRemove node: SKNode, for anchor: ARAnchor) {
         // Called when a mapped node has been removed from the scene graph for the given anchor.
+    }
+}
+
+// MARK: - Vision
+extension ViewController {
+
+    func setupVision() {
+        guard let visionModel = try? VNCoreMLModel(for: Inceptionv3().model) else {
+            fatalError("VNCoreMLModel() FAIL")
+        }
+        
+        let classifyRequest = VNCoreMLRequest(model: visionModel,
+                                              completionHandler: classified)
+        classifyRequest.imageCropAndScaleOption = VNImageCropAndScaleOption.centerCrop
+        visionRequests = [classifyRequest]
+        
+        classify()
+    }
+
+    func classify() {
+        visionQueue.async {
+            self.updateVision()
+            self.classify()
+        }
+    }
+
+    func classified(request: VNRequest, error: Error?) {
+        guard error == nil else {
+            print("classified FAIL: " + (error?.localizedDescription ?? "?"))
+            return
+        }
+        guard let results = request.results else {
+            return
+        }
+
+        let classifieds = results[0...1]
+            .flatMap({ $0 as? VNClassificationObservation })
+            .map({ "\($0.identifier) \(String(format:"- %.2f", $0.confidence))" })
+            .joined(separator: "\n")
+
+        DispatchQueue.main.async {
+            self.visionInfo?.text = classifieds
+            let things = classifieds.components(separatedBy: "-")[0]
+            let thing = things.components(separatedBy: ",")[0]
+            self.visionThing = thing
+        }
+    }
+
+    func updateVision() {
+        guard let frame = sceneView?.session.currentFrame else {
+            return
+        }
+
+        let image = CIImage(cvPixelBuffer: frame.capturedImage)
+        let handler = VNImageRequestHandler(ciImage: image, options: [:])
+        do {
+            try handler.perform(self.visionRequests)
+        } catch {
+            print(error)
+        }
     }
 }
