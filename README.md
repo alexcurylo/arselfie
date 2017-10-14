@@ -7,6 +7,7 @@ Demonstrates adding an SKLabelNode to a tapped ARAnchor in an SKScene with the c
 - [ ] Make video source selectable
 - [ ] Add face tracking
 - [ ] Experiment with [various models](https://github.com/likedan/Awesome-CoreML-Models)
+- [ ] Add snapshots & recording & uploadiing to social media
 - [ ] Add more interesting nodes than plain labels!
 
 ###### _Acknowledgements:_
