@@ -10,7 +10,7 @@ import ARKit
 import SpriteKit
 import Vision
 
-internal class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
     @IBOutlet var sceneView: ARSKView?
 
@@ -27,10 +27,8 @@ internal class ViewController: UIViewController {
     }
 
     func setupScene() {
-        // Set the view's delegate
         sceneView?.delegate = self
         
-        // Show statistics such as fps and node count
         sceneView?.showsFPS = true
         sceneView?.showsDrawCount = true
         sceneView?.showsNodeCount = true
@@ -38,7 +36,6 @@ internal class ViewController: UIViewController {
         sceneView?.showsPhysics = true
         sceneView?.showsFields = true
 
-        // Load the SKScene from 'Scene.sks'
         if let scene = SKScene(fileNamed: "Scene") {
             sceneView?.presentScene(scene)
         }
@@ -51,23 +48,14 @@ internal class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
-
-        // Run the view's session
         sceneView?.session.run(configuration)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        // Pause the view's session
         sceneView?.session.pause()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
     }
 }
 
